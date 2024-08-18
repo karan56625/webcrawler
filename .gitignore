@@ -1,0 +1,5 @@
+# Exclude the .idea directory (IDE settings)
+.idea/
+
+# Exclude the bin directory (compiled binaries)
+bin/
