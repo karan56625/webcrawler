@@ -1,7 +1,9 @@
 # Variables
 APP_NAME := webcrawler
 SRC_DIR := ./cmd/$(APP_NAME)
+CLIENT_DIR := ./cmd/$(APP_NAME)-client
 BUILD_DIR := ./bin
+VERSION := 1.0
 
 # Targets
 .PHONY: all build run test clean
@@ -20,7 +22,34 @@ run: build
 	@echo "Running $(APP_NAME)..."
 	@$(BUILD_DIR)/$(APP_NAME)
 
-# Run all unit tests
+# Build the client and put the binary in the bin directory
+build-client:
+	@echo "Building $(APP_NAME)-client..."
+	@mkdir -p $(BUILD_DIR)
+	@go build -o $(BUILD_DIR)/$(APP_NAME)-client $(CLIENT_DIR)
+
+run-client: build-client
+	@echo "Running $(APP_NAME)-client..."
+	@$(BUILD_DIR)/$(APP_NAME)-client
+
+docker-webcrawler:
+	docker build -f docker/webcrawler/Dockerfile -t webcrawler:$(VERSION) .
+
+docker-webcrawler-run: docker-webcrawler
+	docker run -p 8080:8080 webcrawler:$(VERSION)
+
+docker-webcrawler-push: docker-webcrawler
+	docker tag webcrawler:$(VERSION) ghcr.io/karan56625/webcrawler:$(VERSION)
+	docker push ghcr.io/karan56625/webcrawler:$(VERSION)
+
+docker-webcrawler-client:
+	docker build -f docker/webcrawler-client/Dockerfile -t webcrawler-client:$(VERSION) .
+
+docker-webcrawler-client-push: docker-webcrawler-client
+	docker tag webcrawler-client:$(VERSION) ghcr.io/karan56625/webcrawler-client:$(VERSION)
+    docker push ghcr.io/karan56625/webcrawler-client:$(VERSION)
+
+#Run all unit tests
 test:
 	@echo "Running tests..."
 	@go test ./...
