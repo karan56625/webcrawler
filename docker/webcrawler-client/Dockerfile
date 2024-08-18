@@ -8,7 +8,6 @@ RUN go mod download && go build -o webcrawler-client ./cmd/webcrawler-client
 FROM alpine:latest
 
 WORKDIR /root/
-
 COPY --from=builder /app/webcrawler-client .
 
-CMD ["./webcrawler-client"]
+ENTRYPOINT ["./webcrawler-client"]

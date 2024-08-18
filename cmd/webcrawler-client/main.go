@@ -21,19 +21,15 @@ func main() {
 
 	webcrawlerHost, exists := os.LookupEnv("WEBCRAWLER_HOST")
 	if !exists {
-		fmt.Println("WEBCRAWLER_HOST is not set")
-		fmt.Println("Using local host as webcrawler host")
-		webcrawlerHost = "localhost"
+		webcrawlerHost = "http://localhost"
 	}
 	webcrawlerPort, exists := os.LookupEnv("WEBCRAWLER_PORT")
 	if !exists {
-		fmt.Println("WEBCRAWLER_PORT is not set")
-		fmt.Println("Using default webcrawler port ", config.Port)
 		webcrawlerPort = config.Port
 	}
 
 	// Define the web crawler service endpoint
-	endpoint := "http://" + webcrawlerHost + ":" + webcrawlerPort + config.WebCrawlerEndpoint
+	endpoint := webcrawlerHost + ":" + webcrawlerPort + config.WebCrawlerEndpoint
 
 	// Create the request to start crawling
 	resp, err := http.Get(endpoint + "?url=" + *urlFlag)

@@ -36,7 +36,7 @@ docker-webcrawler:
 	docker build -f docker/webcrawler/Dockerfile -t webcrawler:$(VERSION) .
 
 docker-webcrawler-run: docker-webcrawler
-	docker run -p 8080:8080 webcrawler:$(VERSION)
+	docker run -p 8081:8081 webcrawler:$(VERSION)
 
 docker-webcrawler-push: docker-webcrawler
 	docker tag webcrawler:$(VERSION) ghcr.io/karan56625/webcrawler:$(VERSION)

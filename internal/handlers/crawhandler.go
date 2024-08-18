@@ -114,6 +114,7 @@ func crawl(u *url.URL, domain string, queue chan *url.URL) {
 	resp, err := http.Get(u.String())
 	if err != nil {
 		log.Printf("Failed to crawl: %s\n", u.String())
+		log.Println(err.Error())
 		return
 	}
 	defer resp.Body.Close()
@@ -126,6 +127,7 @@ func crawl(u *url.URL, domain string, queue chan *url.URL) {
 	doc, err := html.Parse(resp.Body)
 	if err != nil {
 		log.Printf("Failed to parse: %s\n", u.String())
+		log.Println(err.Error())
 		return
 	}
 	links := extractLinks(doc, u)
@@ -236,7 +238,7 @@ func createSiteMap(node *models.Node, builder *strings.Builder, level int) {
 		return
 	}
 	// Create indentation based on the current level
-	indent := strings.Repeat("\t", level)
+	indent := strings.Repeat("  ", level)
 	builder.WriteString(fmt.Sprintf(indent + "- /" + node.URI + "\n"))
 
 	// Recursively print each child

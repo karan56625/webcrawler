@@ -86,8 +86,8 @@ func TestCrawlHandler_ValidURLParameter(t *testing.T) {
 	expected := strings.Join([]string{
 		strings.TrimPrefix(server.URL, "http://"),
 		"- /",
-		"\t- /about",
-		"\t- /contact",
+		"  - /about",
+		"  - /contact",
 	}, "\n") + "\n\n"
 
 	if rr.Body.String() != expected {
@@ -156,7 +156,7 @@ func TestFormatSitemap(t *testing.T) {
 	root.Children = []*models.Node{about, contact}
 
 	result := formatSitemap(root, "example.com")
-	expected := "example.com\n- /example.com\n\t- /about\n\t- /contact\n"
+	expected := "example.com\n- /example.com\n  - /about\n  - /contact\n"
 
 	if result != expected {
 		t.Errorf("FormatSitemap returned unexpected result: got %s want %s", result, expected)
