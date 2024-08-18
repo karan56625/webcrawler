@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webcrawler
+  labels:
+    app: webcrawler
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webcrawler
+  template:
+    metadata:
+      labels:
+        app: webcrawler
+    spec:
+      containers:
+        - name: webcrawler
+          image: ghcr.io/karan56625/webcrawler:1.0
+          ports:
+            - containerPort: 8081
+          env:
+            - name: NUMBER_OF_WORKER
+              value: "10"
+            - name: WORKER_QUEUE_LENGTH
+              value: "20"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+              httpGet:
+                path: /readiness
+                port: 8081
+              initialDelaySeconds: 10
+              timeoutSeconds: 5
+              periodSeconds: 10
+              failureThreshold: 3
